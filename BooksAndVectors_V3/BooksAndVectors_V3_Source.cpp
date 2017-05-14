@@ -34,6 +34,7 @@ int main()
 	//load the vector
 	loadVector(input, bookVector);
 
+	//Let the user decide what to do
 	while (keepLooping)
 	{
 		cout << "Would you like to search by title or by number?\nEnter t for title, n for number, or e to exit and view all book titles: ";
@@ -54,23 +55,31 @@ int main()
 		}
 		else if (myString == "n")
 		{
-			cout << "Search by number mode activated\nPlease enter a number, and we'll tell you the title of the book in that place: ";
-
+			int myInt;
+			bool isBroken = false;
+			cout << "Search by number mode activated\n";
+			do {
+				try {
+					cout << "Please enter a number, and we'll tell you the title of the book in that place: ";
+					cin >> myInt;
+					myString = searchByNumber(bookVector, myInt - 1);
+					cout << myString << " is number " << myInt << " in the list\n";
+					isBroken = false;
+				}
+				catch (const out_of_range &myExc)
+				{
+					cout << myExc.what() << "\nHint: try a number between 1 and " << bookVector.size() << endl;
+					isBroken = true;
+				}
+			} while (isBroken);
 		}
+
 		else if (myString == "e")
 			keepLooping = false;
+
 		else
 			cout << "That's not a valid input!\n";
-
 	}
-
-
-	//cout << "Enter a title and I'll tell you where that book is in the list: ";
-	//string myString;
-	//getline(cin, myString);
-	//cout << "that book is in spot " << searchByTitle(bookVector, myString);
-
-
 
 	//print out the whole vector
 	printVector(bookVector);
@@ -109,7 +118,5 @@ int searchByTitle(const vector <string> &myVect, string title)
 
 string searchByNumber(const vector <string> &myVect, int i)
 {
-	if (i > myVect.size())
-		throw out_of_range("There aren't that many books in the vector!");
 	return myVect.at(i);
 }
