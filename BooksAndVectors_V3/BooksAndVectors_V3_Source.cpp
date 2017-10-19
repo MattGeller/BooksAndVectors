@@ -23,6 +23,7 @@ int main()
 {
 	bool keepLooping = true;
 	string myString = "";
+	int choice = 0;
 
 	//define a vector
 	vector <string> bookVector;
@@ -44,6 +45,7 @@ int main()
 			cout << "Search by title mode activated\nPlease enter the name of the book you would like to find: ";
 			getline(cin.ignore(), myString);
 			int myInt = searchByTitle(bookVector, myString);
+
 			if (myInt > 0)
 			{
 				cout << "That book is number " << myInt << " on our list!\n";
@@ -62,6 +64,12 @@ int main()
 				try {
 					cout << "Please enter a number, and we'll tell you the title of the book in that place: ";
 					cin >> myInt;
+					while (cin.fail()) {
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						cout << "Invalid entry, please enter a number: ";
+						cin >> myInt;
+					}
 					myString = searchByNumber(bookVector, myInt - 1);
 					cout << myString << " is number " << myInt << " in the list\n";
 					isBroken = false;
@@ -76,7 +84,6 @@ int main()
 
 		else if (myString == "e")
 			keepLooping = false;
-
 		else
 			cout << "That's not a valid input!\n";
 	}
